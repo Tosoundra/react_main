@@ -1,0 +1,28 @@
+/* INCLUDE VENDOR's */
+@import url(./vendor/fonts.css);
+@import url(./vendor/normalize.css);
+
+/* INCLUDE BLOCKS */
+@import url(./blocks/header/header.css);
+@import url(./blocks/main/main.css);
+@import url(./blocks/footer/footer.css);
+@import url(./blocks/popup/popup.css);
+@import url(./blocks/profile/profile.css);
+@import url(./blocks/elements/elements.css);
+
+/* INCLUDE UTILITY */
+@import url(./blocks/list/list.css);
+@import url(./blocks/button/button.css);
+@import url(./blocks/transition/transition.css);
+
+body {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  position: relative;
+  background-color: black;
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    width: 320px;
+  }
+}

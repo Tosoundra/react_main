@@ -1,0 +1,11 @@
+.places__trash-icon {
+  width: 18px;
+  height: 19px;
+  background: transparent;
+  background-image: url("../../../images/Trash.svg");
+  border: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}

@@ -1,0 +1,10 @@
+.places-grid__element {
+  position: relative;
+  width: 282px;
+  height: 361px;
+  margin: 0 auto 0;
+  border-radius: 10px;
+  overflow: hidden;
+
+  background-color: white;
+}

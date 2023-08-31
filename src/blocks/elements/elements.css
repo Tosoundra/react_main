@@ -1,0 +1,13 @@
+@import url(places-grid/places-grid.css);
+@import url(__element/places-grid__element.css);
+@import url(__image/places__image.css);
+@import url(__trash-icon/placses__trash-icon.css);
+@import url(__name/places__name.css);
+@import url(__container/places__container.css);
+@import url(__like/places__like.css);
+@import url(__like/__like_active/places__like_active.css);
+@import url(__like-container/places__like-container.css);
+@import url(__like-counter/places__like-counter.css);
+.elements {
+   margin-bottom: 66px;
+}

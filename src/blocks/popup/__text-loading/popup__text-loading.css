@@ -1,0 +1,17 @@
+@import url(../../animation/animation.css);
+
+.popup__text-loading {
+  color: rgb(146, 146, 146);
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.popup__text-loading::after {
+  content: '...';
+
+  clip-path: inset(0 -0.2ch 0 0);
+  animation: text-loading 1s steps(4) infinite alternate none;
+}

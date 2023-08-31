@@ -1,0 +1,5 @@
+@keyframes text-loading {
+  to {
+    clip-path: inset(0 2ch 0 0);
+  }
+}
