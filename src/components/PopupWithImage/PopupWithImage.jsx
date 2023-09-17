@@ -1,20 +1,27 @@
-const PopUpWithImage = ({ card, state, onClose }) => {
+import { memo, useContext, useEffect } from 'react';
+import { PopUpWithImageContext, PopupStateContext } from '../../utils/contexts/Contexts';
+
+export const PopUpWithImage = memo(() => {
+  const setImagePopupOpen = useContext(PopUpWithImageContext);
+  const { selectedCard, isImagePopupOpen, isEditProfilePopupOpen } = useContext(PopupStateContext);
+
   function handleCloseClick() {
-    onClose(false);
+    setImagePopupOpen(false);
   }
+
   return (
     <aside
       id="popup-image"
-      className={`${state ? 'popup' : ''} popup_closed popup__card transition`}
+      className={`${isImagePopupOpen ? 'popup' : ''} popup_closed popup__card transition`}
     >
       <div className="popup__form-container">
         <figure className="popup__container">
           <img
-            src={card.link}
+            src={selectedCard.link}
             alt="Здесь должна быть выбранная картинка, но видимо, что-то пошло не так"
             className="popup__image"
           />
-          <figcaption className="popup__caption">{card.name}</figcaption>
+          <figcaption className="popup__caption">{selectedCard.name}</figcaption>
         </figure>
         <button
           onClick={handleCloseClick}
@@ -23,6 +30,4 @@ const PopUpWithImage = ({ card, state, onClose }) => {
       </div>
     </aside>
   );
-};
-
-export default PopUpWithImage;
+});

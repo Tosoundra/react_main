@@ -1,0 +1,11 @@
+@import url(__form/sign__form.css);
+@import url(__button/sign__submit.css);
+@import url(__input/sign__input.css);
+@import url(__title/sign__title.css);
+@import url(__auth-check-text/sign__auth-check-text.css);
+
+.sign {
+  margin-top: 60px;
+  color: white;
+  text-align: center;
+}

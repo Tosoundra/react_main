@@ -1,0 +1,12 @@
+.sign__submit {
+  font-size: 18px;
+  font-weight: 400;
+
+  width: 100%;
+  height: 50px;
+  border: none;
+
+  margin-top: 100px;
+  margin-bottom: 15px;
+  color: black;
+}

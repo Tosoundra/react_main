@@ -1,6 +1,7 @@
-import PopUpWithForm from '../PopupWithForm/PopupWithForm';
+import { memo } from 'react';
+import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
 
-const DeleteCardPopup = ({ isOpen, onClose, onDeleteCard }) => {
+export const DeleteCardPopup = memo(({ isOpen, onClose, onDeleteCard }) => {
   function handleSubmit(e) {
     e.preventDefault();
     onDeleteCard();
@@ -15,6 +16,4 @@ const DeleteCardPopup = ({ isOpen, onClose, onDeleteCard }) => {
       onSubmit={handleSubmit}
     />
   );
-};
-
-export default DeleteCardPopup;
+});

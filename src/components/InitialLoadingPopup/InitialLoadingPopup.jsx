@@ -1,4 +1,4 @@
-const InitialLoadingPopup = ({ isOpen }) => {
+export const InitialLoadingPopup = ({ isOpen }) => {
   return (
     <div>
       <aside id="loading-popup" className={`popup__initial-loading`}></aside>
@@ -7,4 +7,4 @@ const InitialLoadingPopup = ({ isOpen }) => {
   );
 };
 
-export default InitialLoadingPopup;
+

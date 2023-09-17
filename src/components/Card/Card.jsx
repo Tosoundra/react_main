@@ -1,25 +1,27 @@
 import { memo, useContext, useState } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { HandleContexts } from '../../contexts/HandleContexts';
-import { api } from '../API';
 
-const Card = memo(({ card, onCardDelete }) => {
+import { api } from '../API';
+import {
+  CurrentUserContext,
+  PopUpWithImageContext,
+  SetCardContext,
+} from '../../utils/contexts/Contexts';
+
+export const Card = memo(({ card, onCardDelete, open }) => {
   const currentUser = useContext(CurrentUserContext);
 
   const [likeCount, setLikeCount] = useState(card.likes.length);
   const [isLiked, setIsLiked] = useState(card.likes.some(card => card._id === currentUser._id));
   const isOwn = card.owner._id === currentUser._id;
-
-  const handleCardClickContext = useContext(HandleContexts);
-  const { setCard, setImagePopupOpen } = handleCardClickContext.cardClick;
-
+  const setImagePopupOpen = useContext(PopUpWithImageContext);
+  const setCard = useContext(SetCardContext);
   function handleCardClick() {
     setCard(card);
     setImagePopupOpen(true);
   }
 
   function handleDeleteClick() {
-    handleCardClickContext.handleDeleteCardClick();
+    // cardClickHandlers.handleDeleteCardClick();
     onCardDelete(card._id);
   }
 
@@ -33,6 +35,7 @@ const Card = memo(({ card, onCardDelete }) => {
 
   return (
     <li className="places-grid__element">
+      <h1>{Math.random()}</h1>
       <img
         onClick={handleCardClick}
         src={card.link}
@@ -60,5 +63,3 @@ const Card = memo(({ card, onCardDelete }) => {
     </li>
   );
 });
-
-export default Card;

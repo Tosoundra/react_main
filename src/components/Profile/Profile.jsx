@@ -1,44 +1,59 @@
 import React, { memo, useContext, useEffect, useState } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { HandleContexts } from '../../contexts/HandleContexts';
+import {
+  AddPlacePopupContext,
+  CurrentUserContext,
+  EditProfilePopupContext,
+} from '../../utils/contexts/Contexts';
 
-const Profile = () => {
-  const userData = useContext(CurrentUserContext);
+export const Profile = memo(() => {
+  const { name, about, avatar } = useContext(CurrentUserContext);
+  // const setEditAvatarPopupOpen = useContext(AddPlacePopupContext);
+  const setEditProfilePopupOpen = useContext(EditProfilePopupContext);
+  // const setAddPlacePopupOpen = useContext(AddPlacePopupContext);
 
-  const { name, about, avatar } = userData;
+  // function handleAddPlaceClick() {
+  //   setAddPlacePopupOpen(true);
+  // }
 
-  const handleContext = useContext(HandleContexts);
+  // function handleEditAvatarClick() {
+  //   setEditAvatarPopupOpen(true);
+  // }
+
+  function handleEditProfileClick() {
+    setEditProfilePopupOpen(true);
+  }
 
   return (
     <article className="profile">
+      <h1>{Math.random()}</h1>
       <div className="profile__container">
         <div className="image__container">
-          <img src={avatar} alt="аватар" className="profile__image" />
+          {/* <img src={avatar} alt="аватар" className="profile__image" /> */}
           <button
-            onClick={handleContext.handleEditAvatarClick}
+            // onClick={handleEditAvatarClick}
             type="button"
             className="profile__edit-avatar-button transition"
           ></button>
         </div>
         <div className="profile__discription">
           <div className="profile__name-edit-container">
-            <h1 className="profile__title">{name}</h1>
+            {/* <h1 className="profile__title">{name}</h1> */}
             <button
-              onClick={handleContext.handleEditProfileClick}
+              onClick={() => {
+                setEditProfilePopupOpen(true);
+              }}
               type="button"
               className="profile__edit button transition"
             ></button>
           </div>
-          <h2 className="profile__subtitle">{about}</h2>
+          {/* <h2 className="profile__subtitle">{about}</h2> */}
         </div>
       </div>
       <button
-        onClick={handleContext.handleAddPlaceClick}
+        // onClick={handleAddPlaceClick}
         type="button"
         className="profile__add button transition"
       ></button>
     </article>
   );
-};
-
-export default Profile;
+});

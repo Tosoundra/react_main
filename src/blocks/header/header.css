@@ -1,9 +1,15 @@
 .header {
-    max-width: 880px;
-    height: 71px;
+  max-width: 880px;
+  height: 71px;
 
-    margin: 0 auto 40px;
-    padding-top: 45px;
+  color: white;
 
-    border-bottom: 1px solid rgba(84, 84, 84, .7);
+  margin: 0 auto 40px;
+  padding-top: 45px;
+
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+
+  display: grid;
+align-items: baseline;
+  grid-template-columns: 1fr 2fr auto;
 }

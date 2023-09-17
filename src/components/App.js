@@ -1,23 +1,38 @@
-import Header from './Header/Header';
-import Main from './Main/Main';
-import Footer from './Footer/Footer';
-import PopUpWithForm from './PopupWithForm/PopupWithForm';
-import PopUpWithImage from './PopupWithImage/PopupWithImage';
-import { useEffect, useState } from 'react';
+import { Header } from './Header/Header';
+import { Main } from './Main/Main';
+import { Footer } from './Footer/Footer';
+import { PopUpWithImage } from './PopupWithImage/PopupWithImage';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from './API';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { HandleContexts } from '../contexts/HandleContexts';
-import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
-import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup';
-import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
-import DeleteCardPopup from './DeleteCardPopup/DeleteCardPopup';
-import InitialLoadingPopup from './InitialLoadingPopup/InitialLoadingPopup';
+
+import { EditProfilePopup } from './EditProfilePopup/EditProfilePopup';
+import { EditAvatarPopup } from './EditAvatarPopup/EditAvatarPopup';
+import { AddPlacePopup } from './AddPlacePopup/AddPlacePopup';
+import { DeleteCardPopup } from './DeleteCardPopup/DeleteCardPopup';
+import { InitialLoadingPopup } from './InitialLoadingPopup/InitialLoadingPopup';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { PageNotFound } from './PageNotFound/PageNotFound';
+import { SignIn } from './SignIn/SignIn';
+import { SignUp } from './SignUp/SignUp';
+import { ProtecredRouteElement } from './ProtectedRouteElement/ProtectedRouteElement';
+import { auth } from './Authentication/Authentication';
+import { ProviderComponent } from './ProviderComponent/ProviderComponent';
+import {
+  CurrentUserContext,
+  EditProfilePopupContext,
+  PopupStateContext,
+  UserIsLoggedContext,
+} from '../utils/contexts/Contexts';
 
 function App() {
   const [cards, setCards] = useState([]);
   const [selectedCard, setCard] = useState({});
   const [selectedCardForDelete, setSelectedCardForDelete] = useState({});
   const [currentUser, setCurrentUser] = useState({});
+  const [isLogged, setLogged] = useState(false);
+  const [headerUserInfo, setHeaderUserInfo] = useState('');
+
+  const navigate = useNavigate();
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
@@ -34,9 +49,9 @@ function App() {
     setDeleteCardPopupOpen(true);
   }
 
-  function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
-  }
+  // const handleEditProfileClick = useCallback(() => {
+  //   setEditProfilePopupOpen(prevState => !prevState);
+  // }, []);
 
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
@@ -59,7 +74,7 @@ function App() {
     api
       .setUserAvatar(link)
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => console.log(data));
 
     setEditAvatarPopupOpen(false);
   }
@@ -80,10 +95,47 @@ function App() {
     setDeleteCardPopupOpen(false);
   }
 
-  const cardClick = {
-    setCard,
-    setImagePopupOpen,
-  };
+  function handleSignInSubmit(email, password) {
+    auth
+      .login(email, password)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error();
+        }
+        return res.json();
+      })
+      .then(logInToken => {
+        localStorage.setItem('token', logInToken.token);
+        setLogged(true);
+        navigate('/');
+      })
+      .catch(err => console.log(err));
+  }
+
+  const hanldeSelectCard = useCallback(card => {
+    setCard(card);
+  }, []);
+
+  function hanldeImagePopupOpen() {
+    setImagePopupOpen(true);
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      fetch('https://auth.nomoreparties.co/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+        .then(res => res.json())
+        .then(userInfo => {
+          setLogged(true);
+          navigate('/');
+          setHeaderUserInfo(userInfo.data.email);
+        });
+    }
+  }, [isLogged]);
 
   useEffect(() => {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
@@ -98,49 +150,53 @@ function App() {
         setisInitialLoadingPopupOpen(false);
       });
   }, []);
-
- 
+  console.log('app components');
   return (
     <div className="App">
-      <Header />
-      <HandleContexts.Provider
-        value={{
-          handleEditProfileClick,
-          handleAddPlaceClick,
-          handleEditAvatarClick,
-          handleDeleteCardClick,
-          cardClick,
-        }}
-      >
-        <CurrentUserContext.Provider value={currentUser}>
-          <Main cards={cards} onCardDelete={handleDeleteCard} />
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onClose={setEditProfilePopupOpen}
-            onUpdateUser={handleUpdateUser}
-          />
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onClose={setEditAvatarPopupOpen}
-            onUpdateAvatar={handleUpdateAvatar}
-          />
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            onClose={setAddPlacePopupOpen}
-            onAddPlace={handleAddPlaceSubmit}
-          />
-          <DeleteCardPopup
-            isOpen={isDeleteCardPopupOpen}
-            onClose={setDeleteCardPopupOpen}
-            onDeleteCard={handleDeleteCardSubmit}
-          />
-        </CurrentUserContext.Provider>
-      </HandleContexts.Provider>
+      <Header userInfo={headerUserInfo} isLogged={isLogged} logout={setLogged} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CurrentUserContext.Provider value={currentUser}>
+              <UserIsLoggedContext.Provider value={isLogged}>
+                <ProviderComponent setEditProfilePopupOpen={setEditProfilePopupOpen}>
+                  <ProtecredRouteElement
+                    element={Main}
+                    cards={cards}
+                    onCardDelete={handleDeleteCard}
+                  />
+                </ProviderComponent>
+                <EditProfilePopup
+                  setEditProfilePopupOpen={setEditProfilePopupOpen}
+                  isEditProfilePopupOpen={isEditProfilePopupOpen}
+                />
+                {/* <EditProfilePopup
+                  isEditProfilePopupOpen={isEditProfilePopupOpen}
+                  setEditProfilePopupOpen={handleEditProfileClick}
+                /> */}
+              </UserIsLoggedContext.Provider>
+            </CurrentUserContext.Provider>
+          }
+        />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-in" element={<SignIn onSubmit={handleSignInSubmit} />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+      {/* <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} />
+      <AddPlacePopup onAddPlace={handleAddPlaceSubmit} />
+      <PopUpWithImage /> */}
+      <DeleteCardPopup
+        isOpen={isDeleteCardPopupOpen}
+        onClose={setDeleteCardPopupOpen}
+        onDeleteCard={handleDeleteCardSubmit}
+      />
+
       <Footer />
-      {isInitialLoadingPopupOpen && <InitialLoadingPopup isOpen={isInitialLoadingPopupOpen} />}
-      {isImagePopupOpen && (
-        <PopUpWithImage card={selectedCard} state={isImagePopupOpen} onClose={setImagePopupOpen} />
-      )}
+      {isInitialLoadingPopupOpen && <InitialLoadingPopup />}
+      {/* {isImagePopupOpen && (
+       
+      )} */}
       <script type="module" src="./pages/index.js"></script>
     </div>
   );
