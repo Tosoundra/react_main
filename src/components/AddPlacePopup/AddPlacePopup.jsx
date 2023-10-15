@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
-import PopUpWithForm from '../PopupWithForm/PopupWithForm';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
+import { AddPlacePopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
-const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
+export const AddPlacePopup = ({ onSubmit, isOpen, onClose }) => {
+  console.log('add place');
+  const setAddPlacePopupOpen = useContext(AddPlacePopupContext);
+  const { isAddPlacePopupOpen } = useContext(PopupStateContext);
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
 
@@ -13,19 +17,20 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
     setLink(e.target.value);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    onAddPlace({
+    onSubmit({
       name,
       link,
     });
-  }
+    onClose(false);
+  };
 
   useEffect(() => {
     setName('');
     setLink('');
-  }, [isOpen]);
+  }, [isAddPlacePopupOpen]);
 
   return (
     <PopUpWithForm
@@ -63,5 +68,3 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
     </PopUpWithForm>
   );
 };
-
-export default AddPlacePopup;

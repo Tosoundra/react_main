@@ -1,27 +1,28 @@
-import { useRef, useState } from 'react';
-import PopUpWithForm from '../PopupWithForm/PopupWithForm';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
+import { EditAvatarPopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
-const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
-  const input = useRef();
+export const EditAvatarPopup = memo(({ onSubmit, isOpen, onClose }) => {
   const [avatar, setAvatar] = useState('');
 
-  function handleAvatartype() {
-    setAvatar(input.current.value);
+  function handleAvatartype(e) {
+    setAvatar(e.target.value);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    onUpdateAvatar({
+    onSubmit({
       avatar,
     });
-    console.log(avatar)
-  }
+    onClose(false);
+  };
 
+  console.log(isOpen);
   return (
     <PopUpWithForm
-      title="Редактировать профиль"
-      name="edit-profile"
+      title="Редактировать аватар"
+      name="edit-avatar"
       submitText="Сохранить"
       isOpen={isOpen}
       onClose={onClose}
@@ -31,8 +32,7 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
         type="url"
         onChange={handleAvatartype}
         name="link"
-        ref={input}
-        // value={avatar}
+        value={avatar}
         id="avatar__url"
         placeholder="Ссылка на картинку"
         className="popup__input popup__input-avatar-url"
@@ -41,6 +41,4 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
       <span className="form__input-error avatar__url-error"></span>
     </PopUpWithForm>
   );
-};
-
-export default EditAvatarPopup;
+});

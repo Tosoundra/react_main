@@ -1,27 +1,32 @@
 import { memo, useContext, useState } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { HandleContexts } from '../../contexts/HandleContexts';
-import { api } from '../API';
 
-const Card = memo(({ card, onCardDelete }) => {
-  const currentUser = useContext(CurrentUserContext);
+import { api } from '../API';
+import {
+  DeleteCardPopupContext,
+  PopUpWithImageContext,
+  SelectDeleteCardContext,
+  SetCardContext,
+} from '../../utils/contexts/Contexts';
+import { CreatingPortalComponent } from '../CreatingPortalElement/CreatingPortalComponent';
+import { PopUpWithImage } from '../PopupWithImage/PopupWithImage';
+
+export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
+  const [selectedCard, setCard] = useState({});
+  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
 
   const [likeCount, setLikeCount] = useState(card.likes.length);
   const [isLiked, setIsLiked] = useState(card.likes.some(card => card._id === currentUser._id));
   const isOwn = card.owner._id === currentUser._id;
-
-  const handleCardClickContext = useContext(HandleContexts);
-  const { setCard, setImagePopupOpen } = handleCardClickContext.cardClick;
 
   function handleCardClick() {
     setCard(card);
     setImagePopupOpen(true);
   }
 
-  function handleDeleteClick() {
-    handleCardClickContext.handleDeleteCardClick();
-    onCardDelete(card._id);
-  }
+  // function handleDeleteClick() {
+  //   setDeleteCardPopupOpen(true);
+  //   setSelectedCardForDelete(card._id);
+  // }
 
   function handleCardLike() {
     setIsLiked(!isLiked);
@@ -32,33 +37,41 @@ const Card = memo(({ card, onCardDelete }) => {
   }
 
   return (
-    <li className="places-grid__element">
-      <img
-        onClick={handleCardClick}
-        src={card.link}
-        alt="здесь должна быть картинка"
-        className="places__image"
-      />
-      {isOwn && (
-        <button
-          onClick={handleDeleteClick}
-          type="button"
-          className="places__trash-icon button transition"
-        ></button>
-      )}
-      <div className="places__container">
-        <span className="places__name">{card.name}</span>
-        <div className="places__like-container">
+    <>
+      <li className="places-grid__element">
+        <h1>{Math.random()}</h1>
+        <img
+          onClick={handleCardClick}
+          src={card.link}
+          alt="здесь должна быть картинка"
+          className="places__image"
+        />
+        {isOwn && (
           <button
-            onClick={handleCardLike}
+            // onClick={handleDeleteClick}
             type="button"
-            className={`${isLiked ? 'places__like_active' : 'places__like'}  button transition`}
-          />
-          <span className="places__like-counter">{likeCount}</span>
+            className="places__trash-icon button transition"
+          ></button>
+        )}
+        <div className="places__container">
+          <span className="places__name">{card.name}</span>
+          <div className="places__like-container">
+            <button
+              onClick={handleCardLike}
+              type="button"
+              className={`${isLiked ? 'places__like_active' : 'places__like'}  button transition`}
+            />
+            <span className="places__like-counter">{likeCount}</span>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
+      <CreatingPortalComponent
+        isOpen={isImagePopupOpen}
+        onClose={setImagePopupOpen}
+        selectedCard={selectedCard}
+      >
+        <PopUpWithImage />
+      </CreatingPortalComponent>
+    </>
   );
 });
-
-export default Card;

@@ -1,13 +1,17 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { HandleContexts } from '../../contexts/HandleContexts';
+import React, { memo, useState } from 'react';
 
-const Profile = () => {
-  const userData = useContext(CurrentUserContext);
+import { EditProfilePopup } from '../EditProfilePopup/EditProfilePopup';
+import { CreatingPortalComponent } from '../CreatingPortalElement/CreatingPortalComponent';
+import { EditAvatarPopup } from '../EditAvatarPopup/EditAvatarPopup';
+import { AddPlacePopup } from '../AddPlacePopup/AddPlacePopup';
 
-  const { name, about, avatar } = userData;
+export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddPlace }) => {
+  const { name, about, avatar } = currentUser;
 
-  const handleContext = useContext(HandleContexts);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  console.log(document.querySelector('.main'));
 
   return (
     <article className="profile">
@@ -15,7 +19,9 @@ const Profile = () => {
         <div className="image__container">
           <img src={avatar} alt="аватар" className="profile__image" />
           <button
-            onClick={handleContext.handleEditAvatarClick}
+            onClick={() => {
+              setEditAvatarPopupOpen(true);
+            }}
             type="button"
             className="profile__edit-avatar-button transition"
           ></button>
@@ -24,7 +30,9 @@ const Profile = () => {
           <div className="profile__name-edit-container">
             <h1 className="profile__title">{name}</h1>
             <button
-              onClick={handleContext.handleEditProfileClick}
+              onClick={() => {
+                setEditProfilePopupOpen(true);
+              }}
               type="button"
               className="profile__edit button transition"
             ></button>
@@ -33,12 +41,38 @@ const Profile = () => {
         </div>
       </div>
       <button
-        onClick={handleContext.handleAddPlaceClick}
+        onClick={() => {
+          setAddPlacePopupOpen(true);
+        }}
         type="button"
         className="profile__add button transition"
       ></button>
+      <>
+        <CreatingPortalComponent
+          isOpen={isEditAvatarPopupOpen}
+          onClose={setEditAvatarPopupOpen}
+          onSubmit={onUpdateAvatar}
+        >
+          <EditAvatarPopup />
+        </CreatingPortalComponent>
+
+        <CreatingPortalComponent
+          isOpen={isEditProfilePopupOpen}
+          onClose={setEditProfilePopupOpen}
+          onSubmit={onUpdateUser}
+          currentUser={currentUser}
+        >
+          <EditProfilePopup />
+        </CreatingPortalComponent>
+
+        <CreatingPortalComponent
+          isOpen={isAddPlacePopupOpen}
+          onClose={setAddPlacePopupOpen}
+          onSubmit={onAddPlace}
+        >
+          <AddPlacePopup />
+        </CreatingPortalComponent>
+      </>
     </article>
   );
-};
-
-export default Profile;
+});

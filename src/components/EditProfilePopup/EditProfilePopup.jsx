@@ -1,9 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
-import PopUpWithForm from '../PopupWithForm/PopupWithForm';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { memo, useCallback, useContext, useEffect, useState } from 'react';
+import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
+import {
+  CurrentUserContext,
+  EditProfilePopupContext,
+  PopupStateContext,
+} from '../../utils/contexts/Contexts';
 
-const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
-  const currentUser = useContext(CurrentUserContext);
+export const EditProfilePopup = memo(({ isOpen, onClose, onSubmit, currentUser }) => {
+  console.log(currentUser);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -16,14 +20,15 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
     setDescription(e.target.value);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    onUpdateUser({
+    onSubmit({
       name,
       about: description,
     });
-  }
+    onClose(false);
+  };
 
   useEffect(() => {
     currentUser.name && setName(currentUser.name);
@@ -67,5 +72,4 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
       <span className="form__input-error author__description-error"></span>
     </PopUpWithForm>
   );
-};
-export default EditProfilePopup;
+});

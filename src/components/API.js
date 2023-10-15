@@ -83,14 +83,13 @@ class API {
     });
   }
 
-  changeLikeCardStatus(cardID, isLike)  {
-    if(isLike){
-      return this.dislikeCard(cardID)
+  changeLikeCardStatus(cardID, isLike) {
+    if (isLike) {
+      return this.dislikeCard(cardID);
+    } else {
+      return this.likeCard(cardID);
     }
-    else {
-      return this.likeCard(cardID)
-    }
-  };
+  }
 }
 
 export const api = new API({
