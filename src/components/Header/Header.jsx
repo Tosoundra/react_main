@@ -10,7 +10,6 @@ export const Header = memo(({ userInfo, isLogged, logout }) => {
     auth.logout();
     navigate('/sign-in', { replace: true });
     logout(false);
-    console.log(localStorage.getItem('token'));
   }
 
   return (

@@ -1,32 +1,31 @@
-import { memo, useContext, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
 import { EditAvatarPopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
-export const EditAvatarPopup = memo(({ onUpdateAvatar }) => {
-  const { isEditAvatarPopupOpen } = useContext(PopupStateContext);
-  const setEditAvatarPopupOpen = useContext(EditAvatarPopupContext);
-
+export const EditAvatarPopup = memo(({ onSubmit, isOpen, onClose }) => {
   const [avatar, setAvatar] = useState('');
 
   function handleAvatartype(e) {
     setAvatar(e.target.value);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    onUpdateAvatar({
+    onSubmit({
       avatar,
     });
-  }
-  console.log(isEditAvatarPopupOpen);
+    onClose(false);
+  };
+
+  console.log(isOpen);
   return (
     <PopUpWithForm
-      title="Редактировать профиль"
-      name="edit-profile"
+      title="Редактировать аватар"
+      name="edit-avatar"
       submitText="Сохранить"
-      isOpen={isEditAvatarPopupOpen}
-      onClose={setEditAvatarPopupOpen}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     >
       <input

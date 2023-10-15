@@ -1,13 +1,11 @@
-import { memo, useContext, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserIsLoggedContext } from '../../utils/contexts/Contexts';
 
-export const ProtecredRouteElement = ({ element: Component, ...props }) => {
-  const isLogged = useContext(UserIsLoggedContext);
+export const ProtectedRouteElement = memo(({ children, isLogged }) => {
   const navigate = useNavigate();
-
+  console.log(isLogged);
   useEffect(() => {
     !isLogged && navigate('/sign-in', { replace: true });
-  });
-  return isLogged && <Component {...props} />;
-};
+  }, [isLogged]);
+  return isLogged && <>{children}</>;
+});

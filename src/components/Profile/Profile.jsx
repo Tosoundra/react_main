@@ -1,43 +1,34 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
-import {
-  AddPlacePopupContext,
-  CurrentUserContext,
-  EditProfilePopupContext,
-} from '../../utils/contexts/Contexts';
+import React, { memo, useState } from 'react';
 
-export const Profile = memo(() => {
-  const { name, about, avatar } = useContext(CurrentUserContext);
-  // const setEditAvatarPopupOpen = useContext(AddPlacePopupContext);
-  const setEditProfilePopupOpen = useContext(EditProfilePopupContext);
-  // const setAddPlacePopupOpen = useContext(AddPlacePopupContext);
+import { EditProfilePopup } from '../EditProfilePopup/EditProfilePopup';
+import { CreatingPortalComponent } from '../CreatingPortalElement/CreatingPortalComponent';
+import { EditAvatarPopup } from '../EditAvatarPopup/EditAvatarPopup';
+import { AddPlacePopup } from '../AddPlacePopup/AddPlacePopup';
 
-  // function handleAddPlaceClick() {
-  //   setAddPlacePopupOpen(true);
-  // }
+export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddPlace }) => {
+  const { name, about, avatar } = currentUser;
 
-  // function handleEditAvatarClick() {
-  //   setEditAvatarPopupOpen(true);
-  // }
-
-  function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
-  }
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  console.log(document.querySelector('.main'));
 
   return (
     <article className="profile">
-      <h1>{Math.random()}</h1>
       <div className="profile__container">
         <div className="image__container">
-          {/* <img src={avatar} alt="аватар" className="profile__image" /> */}
+          <img src={avatar} alt="аватар" className="profile__image" />
           <button
-            // onClick={handleEditAvatarClick}
+            onClick={() => {
+              setEditAvatarPopupOpen(true);
+            }}
             type="button"
             className="profile__edit-avatar-button transition"
           ></button>
         </div>
         <div className="profile__discription">
           <div className="profile__name-edit-container">
-            {/* <h1 className="profile__title">{name}</h1> */}
+            <h1 className="profile__title">{name}</h1>
             <button
               onClick={() => {
                 setEditProfilePopupOpen(true);
@@ -46,14 +37,42 @@ export const Profile = memo(() => {
               className="profile__edit button transition"
             ></button>
           </div>
-          {/* <h2 className="profile__subtitle">{about}</h2> */}
+          <h2 className="profile__subtitle">{about}</h2>
         </div>
       </div>
       <button
-        // onClick={handleAddPlaceClick}
+        onClick={() => {
+          setAddPlacePopupOpen(true);
+        }}
         type="button"
         className="profile__add button transition"
       ></button>
+      <>
+        <CreatingPortalComponent
+          isOpen={isEditAvatarPopupOpen}
+          onClose={setEditAvatarPopupOpen}
+          onSubmit={onUpdateAvatar}
+        >
+          <EditAvatarPopup />
+        </CreatingPortalComponent>
+
+        <CreatingPortalComponent
+          isOpen={isEditProfilePopupOpen}
+          onClose={setEditProfilePopupOpen}
+          onSubmit={onUpdateUser}
+          currentUser={currentUser}
+        >
+          <EditProfilePopup />
+        </CreatingPortalComponent>
+
+        <CreatingPortalComponent
+          isOpen={isAddPlacePopupOpen}
+          onClose={setAddPlacePopupOpen}
+          onSubmit={onAddPlace}
+        >
+          <AddPlacePopup />
+        </CreatingPortalComponent>
+      </>
     </article>
   );
 });

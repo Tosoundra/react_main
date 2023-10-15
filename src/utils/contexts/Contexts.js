@@ -8,3 +8,5 @@ export const UserIsLoggedContext = createContext();
 export const EditProfilePopupContext = createContext();
 export const AddPlacePopupContext = createContext();
 export const EditAvatarPopupContext = createContext();
+export const DeleteCardPopupContext = createContext();
+export const SelectDeleteCardContext = createContext();

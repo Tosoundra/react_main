@@ -1,18 +1,20 @@
 import { memo, useContext, useEffect } from 'react';
-import { PopUpWithImageContext, PopupStateContext } from '../../utils/contexts/Contexts';
+import {
+  PopUpWithImageContext,
+  PopupStateContext,
+  SetCardContext,
+} from '../../utils/contexts/Contexts';
 
-export const PopUpWithImage = memo(() => {
-  const setImagePopupOpen = useContext(PopUpWithImageContext);
-  const { selectedCard, isImagePopupOpen, isEditProfilePopupOpen } = useContext(PopupStateContext);
-
+export const PopUpWithImage = memo(({ isOpen, onClose, selectedCard }) => {
+  console.log('withimage');
   function handleCloseClick() {
-    setImagePopupOpen(false);
+    onClose(false);
   }
 
   return (
     <aside
       id="popup-image"
-      className={`${isImagePopupOpen ? 'popup' : ''} popup_closed popup__card transition`}
+      className={`${isOpen ? 'popup' : ''} popup_closed popup__card transition`}
     >
       <div className="popup__form-container">
         <figure className="popup__container">
