@@ -1,10 +1,13 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 export const PopUpWithForm = memo(
   ({ isOpen, name, title, submitText, children, onClose, onSubmit }) => {
-    function handleCloseClick() {
-      onClose(false);
-    }
+    useEffect(() => {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }, [isOpen]);
 
     return (
       <aside className={`${isOpen ? 'popup' : ''} popup_closed popup__${name} transition`}>
@@ -13,8 +16,7 @@ export const PopUpWithForm = memo(
             onSubmit={onSubmit}
             name={`popup__form-${name}`}
             noValidate
-            className="popup__form form__edit-profile"
-          >
+            className="popup__form form__edit-profile">
             <h2 className="popup__title">{title}</h2>
             <>{children}</>
             <button type="submit" className="popup__submit button transition">

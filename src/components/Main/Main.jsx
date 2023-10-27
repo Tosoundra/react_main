@@ -62,7 +62,7 @@ export const Main = memo(({ onCardDelete, open }) => {
       />
 
       <section className="elements">
-        <h1 style={{ color: 'white' }}>{Math.random()}</h1>
+        {/* <h1 style={{ color: 'white' }}>{Math.random()}</h1> */}
         <ul className="places-grid list">
           {cards.map((card, index) => (
             <Card

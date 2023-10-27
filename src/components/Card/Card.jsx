@@ -39,7 +39,7 @@ export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
   return (
     <>
       <li className="places-grid__element">
-        <h1>{Math.random()}</h1>
+        {/* <h1>{Math.random()}</h1> */}
         <img
           onClick={handleCardClick}
           src={card.link}

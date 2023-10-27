@@ -11,11 +11,17 @@ export const PopUpWithImage = memo(({ isOpen, onClose, selectedCard }) => {
     onClose(false);
   }
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   return (
     <aside
       id="popup-image"
-      className={`${isOpen ? 'popup' : ''} popup_closed popup__card transition`}
-    >
+      className={`${isOpen ? 'popup' : ''} popup_closed popup__card transition`}>
       <div className="popup__form-container">
         <figure className="popup__container">
           <img

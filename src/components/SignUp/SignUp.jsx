@@ -31,7 +31,7 @@ export const SignUp = () => {
         });
         setStatus(true);
       })
-      .catch(err => console.log())
+      .catch(err => console.log(err))
       .finally(() => {
         setIsOpen(true);
       });
