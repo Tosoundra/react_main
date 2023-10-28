@@ -1,22 +1,18 @@
-import { memo, useCallback, useContext } from 'react';
+import { memo } from 'react';
 import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
-import { DeleteCardPopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
-export const DeleteCardPopup = memo(({ onDeleteCard }) => {
-  const setDeleteCardPopupOpen = useContext(DeleteCardPopupContext);
-  const { isDeleteCardPopupOpen } = useContext(PopupStateContext);
-  console.log('delete');
-  const handleSubmit = useCallback(e => {
+export const DeleteCardPopup = memo(({ handleDeleteCardSubmit, isOpen, onClose }) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    onDeleteCard();
-  }, []);
+    handleDeleteCardSubmit();
+  }
   return (
     <PopUpWithForm
       title="Вы уверены?"
       name="delete-card"
       submitText="Да"
-      isOpen={isDeleteCardPopupOpen}
-      onClose={setDeleteCardPopupOpen}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     />
   );

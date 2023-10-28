@@ -1,15 +1,14 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
-import { EditAvatarPopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
 export const EditAvatarPopup = memo(({ onSubmit, isOpen, onClose }) => {
   const [avatar, setAvatar] = useState('');
 
-  function handleAvatartype(e) {
+  function inputOnChangeHandler(e) {
     setAvatar(e.target.value);
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     onSubmit({
@@ -18,7 +17,6 @@ export const EditAvatarPopup = memo(({ onSubmit, isOpen, onClose }) => {
     onClose(false);
   };
 
-  console.log(isOpen);
   return (
     <PopUpWithForm
       title="Редактировать аватар"
@@ -26,11 +24,10 @@ export const EditAvatarPopup = memo(({ onSubmit, isOpen, onClose }) => {
       submitText="Сохранить"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
-    >
+      onSubmit={handleSubmit}>
       <input
         type="url"
-        onChange={handleAvatartype}
+        onChange={inputOnChangeHandler}
         name="link"
         value={avatar}
         id="avatar__url"

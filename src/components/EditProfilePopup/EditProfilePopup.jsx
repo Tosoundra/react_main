@@ -1,10 +1,5 @@
-import { memo, useCallback, useContext, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
-import {
-  CurrentUserContext,
-  EditProfilePopupContext,
-  PopupStateContext,
-} from '../../utils/contexts/Contexts';
 
 export const EditProfilePopup = memo(({ isOpen, onClose, onSubmit, currentUser }) => {
   console.log(currentUser);
@@ -12,16 +7,12 @@ export const EditProfilePopup = memo(({ isOpen, onClose, onSubmit, currentUser }
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  function handleNameType(e) {
-    setName(e.target.value);
+  function inputOnChangeHandler(event, setterFunctionName) {
+    setterFunctionName(event.target.value);
   }
 
-  function handleDescriptionType(e) {
-    setDescription(e.target.value);
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
     onSubmit({
       name,
@@ -42,11 +33,12 @@ export const EditProfilePopup = memo(({ isOpen, onClose, onSubmit, currentUser }
       submitText="Сохранить"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
-    >
+      onSubmit={handleSubmit}>
       <input
         type="text"
-        onChange={handleNameType}
+        onChange={(event) => {
+          inputOnChangeHandler(event, setName);
+        }}
         minLength="2"
         maxLength="40"
         name="name"
@@ -59,7 +51,9 @@ export const EditProfilePopup = memo(({ isOpen, onClose, onSubmit, currentUser }
       <span className="form__input-error author__name-error"></span>
       <input
         type="text"
-        onChange={handleDescriptionType}
+        onChange={(event) => {
+          inputOnChangeHandler(event, setDescription);
+        }}
         minLength="2"
         maxLength="200"
         name="about"

@@ -1,5 +1,4 @@
 import React, { memo, useState } from 'react';
-
 import { EditProfilePopup } from '../EditProfilePopup/EditProfilePopup';
 import { CreatingPortalComponent } from '../CreatingPortalElement/CreatingPortalComponent';
 import { EditAvatarPopup } from '../EditAvatarPopup/EditAvatarPopup';
@@ -11,7 +10,6 @@ export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddP
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  console.log(document.querySelector('.main'));
 
   return (
     <article className="profile">
@@ -23,10 +21,9 @@ export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddP
               setEditAvatarPopupOpen(true);
             }}
             type="button"
-            className="profile__edit-avatar-button transition"
-          ></button>
+            className="profile__edit-avatar-button transition"></button>
         </div>
-        <div className="profile__discription">
+        <div className="profile__description">
           <div className="profile__name-edit-container">
             <h1 className="profile__title">{name}</h1>
             <button
@@ -34,8 +31,7 @@ export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddP
                 setEditProfilePopupOpen(true);
               }}
               type="button"
-              className="profile__edit button transition"
-            ></button>
+              className="profile__edit button transition"></button>
           </div>
           <h2 className="profile__subtitle">{about}</h2>
         </div>
@@ -45,14 +41,12 @@ export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddP
           setAddPlacePopupOpen(true);
         }}
         type="button"
-        className="profile__add button transition"
-      ></button>
+        className="profile__add button transition"></button>
       <>
         <CreatingPortalComponent
           isOpen={isEditAvatarPopupOpen}
           onClose={setEditAvatarPopupOpen}
-          onSubmit={onUpdateAvatar}
-        >
+          onSubmit={onUpdateAvatar}>
           <EditAvatarPopup />
         </CreatingPortalComponent>
 
@@ -60,16 +54,14 @@ export const Profile = memo(({ currentUser, onUpdateUser, onUpdateAvatar, onAddP
           isOpen={isEditProfilePopupOpen}
           onClose={setEditProfilePopupOpen}
           onSubmit={onUpdateUser}
-          currentUser={currentUser}
-        >
+          currentUser={currentUser}>
           <EditProfilePopup />
         </CreatingPortalComponent>
 
         <CreatingPortalComponent
           isOpen={isAddPlacePopupOpen}
           onClose={setAddPlacePopupOpen}
-          onSubmit={onAddPlace}
-        >
+          onSubmit={onAddPlace}>
           <AddPlacePopup />
         </CreatingPortalComponent>
       </>

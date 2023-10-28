@@ -1,21 +1,18 @@
-import { memo, useContext, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { api } from '../API';
-import {
-  DeleteCardPopupContext,
-  PopUpWithImageContext,
-  SelectDeleteCardContext,
-  SetCardContext,
-} from '../../utils/contexts/Contexts';
 import { CreatingPortalComponent } from '../CreatingPortalElement/CreatingPortalComponent';
 import { PopUpWithImage } from '../PopupWithImage/PopupWithImage';
+import { DeleteCardPopup } from '../DeleteCardPopup/DeleteCardPopup';
 
-export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
+export const Card = memo(({ card, currentUser, setCardForDelete, handleDeleteCardSubmit }) => {
   const [selectedCard, setCard] = useState({});
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
 
+  const [isDeleteCardPopupOpen, setDeleteCardPopupOpen] = useState(false);
+
   const [likeCount, setLikeCount] = useState(card.likes.length);
-  const [isLiked, setIsLiked] = useState(card.likes.some(card => card._id === currentUser._id));
+  const [isLiked, setIsLiked] = useState(card.likes.some((card) => card._id === currentUser._id));
   const isOwn = card.owner._id === currentUser._id;
 
   function handleCardClick() {
@@ -23,23 +20,22 @@ export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
     setImagePopupOpen(true);
   }
 
-  // function handleDeleteClick() {
-  //   setDeleteCardPopupOpen(true);
-  //   setSelectedCardForDelete(card._id);
-  // }
+  function handleDeleteClick() {
+    setDeleteCardPopupOpen(true);
+    setCardForDelete(card._id);
+  }
 
   function handleCardLike() {
     setIsLiked(!isLiked);
     api
       .changeLikeCardStatus(card._id, isLiked)
-      .then(response => response.json())
-      .then(card => setLikeCount(card.likes.length));
+      .then((response) => response.json())
+      .then((card) => setLikeCount(card.likes.length));
   }
 
   return (
     <>
       <li className="places-grid__element">
-        {/* <h1>{Math.random()}</h1> */}
         <img
           onClick={handleCardClick}
           src={card.link}
@@ -48,10 +44,9 @@ export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
         />
         {isOwn && (
           <button
-            // onClick={handleDeleteClick}
+            onClick={handleDeleteClick}
             type="button"
-            className="places__trash-icon button transition"
-          ></button>
+            className="places__trash-icon button transition"></button>
         )}
         <div className="places__container">
           <span className="places__name">{card.name}</span>
@@ -68,9 +63,15 @@ export const Card = memo(({ card, currentUser, setSelectedCardForDelete }) => {
       <CreatingPortalComponent
         isOpen={isImagePopupOpen}
         onClose={setImagePopupOpen}
-        selectedCard={selectedCard}
-      >
+        selectedCard={selectedCard}>
         <PopUpWithImage />
+      </CreatingPortalComponent>
+
+      <CreatingPortalComponent
+        isOpen={isDeleteCardPopupOpen}
+        onClose={setDeleteCardPopupOpen}
+        handleDeleteCardSubmit={handleDeleteCardSubmit}>
+        <DeleteCardPopup />
       </CreatingPortalComponent>
     </>
   );

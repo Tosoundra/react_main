@@ -1,23 +1,15 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PopUpWithForm } from '../PopupWithForm/PopupWithForm';
-import { AddPlacePopupContext, PopupStateContext } from '../../utils/contexts/Contexts';
 
 export const AddPlacePopup = ({ onSubmit, isOpen, onClose }) => {
-  console.log('add place');
-  const setAddPlacePopupOpen = useContext(AddPlacePopupContext);
-  const { isAddPlacePopupOpen } = useContext(PopupStateContext);
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
 
-  function handleCardNametype(e) {
-    setName(e.target.value);
+  function inputOnChangeHandle(event, setterFunctionName) {
+    setterFunctionName(event.target.value);
   }
 
-  function handleCardLinktype(e) {
-    setLink(e.target.value);
-  }
-
-  const handleSubmit = e => {
+  function handleSubmit(e) {
     e.preventDefault();
 
     onSubmit({
@@ -25,12 +17,12 @@ export const AddPlacePopup = ({ onSubmit, isOpen, onClose }) => {
       link,
     });
     onClose(false);
-  };
+  }
 
   useEffect(() => {
     setName('');
     setLink('');
-  }, [isAddPlacePopupOpen]);
+  }, [isOpen]);
 
   return (
     <PopUpWithForm
@@ -39,13 +31,14 @@ export const AddPlacePopup = ({ onSubmit, isOpen, onClose }) => {
       submitText="Сохранить"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
-    >
+      onSubmit={handleSubmit}>
       <input
         type="text"
         name="name"
         value={name}
-        onChange={handleCardNametype}
+        onChange={(event) => {
+          inputOnChangeHandle(event, setName);
+        }}
         id="place__name"
         minLength="2"
         maxLength="30"
@@ -58,7 +51,9 @@ export const AddPlacePopup = ({ onSubmit, isOpen, onClose }) => {
         type="url"
         name="link"
         value={link}
-        onChange={handleCardLinktype}
+        onChange={(event) => {
+          inputOnChangeHandle(event, setLink);
+        }}
         id="place__link"
         placeholder="Ссылка на картинку"
         className="popup__input popup__input-place-url"

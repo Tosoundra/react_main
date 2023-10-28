@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect } from 'react';
 
 export const PopUpWithForm = memo(
   ({ isOpen, name, title, submitText, children, onClose, onSubmit }) => {

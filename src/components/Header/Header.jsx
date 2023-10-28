@@ -3,13 +3,13 @@ import logoPath from '../../images/logo.svg';
 import { auth } from '../Authentication/Authentication';
 import { useNavigate } from 'react-router-dom';
 
-export const Header = memo(({ userInfo, isLogged, logout }) => {
+export const Header = memo(({ userInfo, isLogged, setLogged }) => {
   const navigate = useNavigate();
 
   function handleButtonExitClick() {
     auth.logout();
     navigate('/sign-in', { replace: true });
-    logout(false);
+    setLogged(false);
   }
 
   return (
@@ -19,15 +19,13 @@ export const Header = memo(({ userInfo, isLogged, logout }) => {
         <>
           <span
             style={{ textAlign: 'right', marginRight: '25px' }}
-            className="sign__auth-check-text"
-          >
+            className="sign__auth-check-text">
             {userInfo}
           </span>
           <span
             onClick={handleButtonExitClick}
             style={{ color: '#A9A9A9', fontSize: '18px', fontWeight: '400' }}
-            className="button transition"
-          >
+            className="button transition">
             Выйти
           </span>
         </>

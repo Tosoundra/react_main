@@ -1,12 +1,6 @@
-import { memo, useContext, useEffect } from 'react';
-import {
-  PopUpWithImageContext,
-  PopupStateContext,
-  SetCardContext,
-} from '../../utils/contexts/Contexts';
+import { memo, useEffect } from 'react';
 
 export const PopUpWithImage = memo(({ isOpen, onClose, selectedCard }) => {
-  console.log('withimage');
   function handleCloseClick() {
     onClose(false);
   }
